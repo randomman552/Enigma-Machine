@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,9 +23,21 @@ namespace Enigma_Machine
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        Enigma enigma;
+
         public MainPage()
         {
             this.InitializeComponent();
+            enigma = new Enigma();
+
+            int[] wheels = enigma.Wheels;
+            String encoded = enigma.Encode("enigma");
+            enigma.Wheels = wheels;
+            String decoded = enigma.Decode(encoded);
+
+            Debug.WriteLine(String.Format("Wheels: {0}, {1}, {2}", wheels[0], wheels[1], wheels[2]));
+            Debug.WriteLine("Encoded: " + encoded);
+            Debug.WriteLine("Decoded: " + decoded);
         }
     }
 }
