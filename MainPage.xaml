@@ -6,9 +6,30 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="1000" ManipulationMode="None" Height="750" ScrollViewer.VerticalScrollBarVisibility="Disabled">
 
     <Grid>
-
+        <Grid HorizontalAlignment="Left" Height="257" VerticalAlignment="Top" Margin="29,13,0,0">
+            <Slider x:Name="W1Slider" HorizontalAlignment="Center" VerticalAlignment="Top" Width="32" Orientation="Vertical" Height="209" Maximum="25" ValueChanged="WheelSlider_ValueChanged" AutomationProperties.HelpText="Wheel 1 Position" Grid.RowSpan="2"/>
+            <TextBlock x:Name="W1TextBlock" HorizontalAlignment="Center" Margin="0,214,0,0" Text="W1" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18"/>
+            <TextBlock x:Name="W1PosText" HorizontalAlignment="Center" Margin="0,238,0,0" Text="00" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextAlignment="Center" Width="16"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="257" VerticalAlignment="Top" Margin="66,13,0,0">
+            <Slider x:Name="W2Slider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Orientation="Vertical" Height="209" Maximum="25" ValueChanged="WheelSlider_ValueChanged" AutomationProperties.HelpText="Wheel 2 Position"/>
+            <TextBlock x:Name="W2TextBlock" HorizontalAlignment="Left" Margin="3,214,0,0" Text="W2" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18"/>
+            <TextBlock x:Name="W2PosText" HorizontalAlignment="Left" Margin="8,238,0,0" Text="00" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextAlignment="Center" Width="16"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="257" VerticalAlignment="Top" Margin="103,13,0,0">
+            <Slider x:Name="W3Slider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Orientation="Vertical" Height="209" Maximum="25" ValueChanged="WheelSlider_ValueChanged" AutomationProperties.HelpText="Wheel 3 Position"/>
+            <TextBlock x:Name="W3TextBlock" HorizontalAlignment="Left" Margin="3,214,0,0" Text="W3" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18"/>
+            <TextBlock x:Name="W3PosText" HorizontalAlignment="Left" Margin="8,238,0,0" Text="00" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextAlignment="Center" Width="16"/>
+        </Grid>
+        <TextBox x:Name="InputText" Margin="10,0,594,10" PlaceholderText="Input text here!" TextWrapping="Wrap" Height="257" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="OutputText" Margin="0,0,10,10" PlaceholderText="Output text is displayed here!" TextWrapping="Wrap" IsReadOnly="True" HorizontalAlignment="Right" Width="396" Height="257" VerticalAlignment="Bottom"/>
+        <Button x:Name="ProcessButton" Content="Process" HorizontalAlignment="Center" Margin="0,591,0,0" VerticalAlignment="Top" Height="42" Width="129" Click="ProcessInput"/>
+        <Button x:Name="SaveWheelsButton" Content="Save" Margin="29,275,0,0" VerticalAlignment="Top" Height="35" Width="53" Click="SaveWheels"/>
+        <Button x:Name="LoadWheelsButton" Content="Load" Margin="82,275,0,0" VerticalAlignment="Top" Height="35" Width="53" Click="LoadWheels" IsEnabled="False"/>
+        <CheckBox x:Name="DecodeModeCheckbox" Content="Decode" Margin="0,638,0,0" VerticalAlignment="Top" Width="70" Height="27" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" HorizontalAlignment="Center"/>
+        <Button x:Name="SwitchButton" Content="Switch" HorizontalAlignment="Center" Margin="0,544,0,0" VerticalAlignment="Top" Height="42" Width="129" Click="SwitchInput"/>
     </Grid>
 </Page>

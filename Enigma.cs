@@ -33,6 +33,13 @@ public class Enigma
     }
 
 
+	/// <summary>
+	/// Function to be called whenever the wheels are advanced.
+	/// Should be of void type and take no arguments.
+	/// </summary>
+	public Action OnWheelAdvance;
+
+
 	/// <param name="wheels">The inital wheel values (list of length 3). If unspecified random numbers will be used.</param>
 	public Enigma(int[] wheels = null)
 	{
@@ -113,13 +120,16 @@ public class Enigma
 	/// <returns>The newly encoded character</returns>
 	public char EncodeChar(char c)
 	{
-		//Convert to lower case, and subtract 97 to make 'a' 0.
-		c = (char)(Char.ToLower(c) - 97);
+		if (Char.IsLetter(c))
+		{
+			//Convert to lower case, and subtract 97 to make 'a' 0.
+			c = (char)(Char.ToLower(c) - 97);
 
-		//Apply the wheels to the character, then add 97 to make 0 into 'a' again.
-		c = (char)(Mod(c + ws[0] + ws[1] + ws[2], 25) + 97);
+			//Apply the wheels to the character, then add 97 to make 0 into 'a' again.
+			c = (char)(Mod(c + ws[0] + ws[1] + ws[2], 25) + 97);
 
-		AdvanceWheels();
+			AdvanceWheels();
+		}
 		return c;
 	}
 
@@ -131,38 +141,46 @@ public class Enigma
 	/// <returns>The newly decoded character</returns>
 	public char DecodeChar(char c)
     {
-		//Convert to lower case, and subtract 97 to make 'a' 0.
-		c = (char)(Char.ToLower(c) - 97);
+		if (Char.IsLetter(c))
+		{
+			//Convert to lower case, and subtract 97 to make 'a' 0.
+			c = (char)(Char.ToLower(c) - 97);
 
-		//Apply the wheels to the character, then add 97 to make 0 into 'a' again.
-		c = (char)(Mod(c - (ws[0] + ws[1] + ws[2]), 25) + 97);
+			//Apply the wheels to the character, then add 97 to make 0 into 'a' again.
+			c = (char)(Mod(c - (ws[0] + ws[1] + ws[2]), 25) + 97);
 
-		AdvanceWheels();
+			AdvanceWheels();
+		}
 		return c;
 	}
 
 
 	/// <summary>
-	/// Advance the wheels by one state, this will handle rollover to the next wheel.
+	/// Advance the wheels 1 state, this will handle rollover to the next wheel.
 	/// </summary>
-	private void AdvanceWheels()
+	public void AdvanceWheels()
     {
-		//Probably a better way to do this rather than nested if statements, but this works for now
 		ws[0]++;
 
-        for (int i = 0; i < ws.Length; i++)
-        {
+		for (int i = 0; i < ws.Length; i++)
+		{
 			if (ws[i] > 25)
-            {
+			{
 				//Advance next wheel if there is one
 				if (i + 1 < ws.Length)
 				{
 					ws[i + 1]++;
 				}
-				
+
 				//Wrap current wheel around
 				ws[i] %= 25;
-            }
-        }
-    }
+			}
+		}
+
+		//Run the on wheel advance method if it is set
+		if (!(OnWheelAdvance is null))
+		{
+			OnWheelAdvance();
+		}
+	}
 }
