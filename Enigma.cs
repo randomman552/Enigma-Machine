@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//TODO: Switchboard implementation
 
 /// <summary>
 /// Class representing and enigma machine, can encode and decode text.
@@ -24,6 +23,10 @@ public class Enigma
 		set{
 			if (!(value is null) && value.Length == 3) {
 				ws = (int[])value.Clone();
+				if (!(OnWheelChange is null))
+				{
+					OnWheelChange(Wheels);
+				}
 			} 
 			else
             {
@@ -50,6 +53,21 @@ public class Enigma
         {
 			return new Dictionary<char, char>(sb);
         }
+		set
+        {
+			//We do this instead of just introducing the new value so that any link/unlink events are still called properly
+			//Unlink all old pairs
+            foreach (var pair in SwitchBoard)
+            {
+				UnlinkChar(pair.Key);
+            }
+
+			//Link all new pairs
+            foreach (var pair in value)
+            {
+				LinkChars(pair.Key, pair.Value);
+            }
+        }
 	}
 
 
@@ -60,10 +78,10 @@ public class Enigma
 
 
 	/// <summary>
-	/// Method to be called whenever the wheels are advanced.
+	/// Method to be called whenever the wheels are changed.
 	/// Should take an integer array as an argument, this represents the wheel states.
 	/// </summary>
-	public Action<int[]> OnWheelAdvance;
+	public Action<int[]> OnWheelChange;
 
 
 	/// <summary>
@@ -85,13 +103,12 @@ public class Enigma
 	{
 		if (wheels is null)
         {
-			RandomiseWheels();
+			Wheels = new int[] { 0, 0, 0 };
         }
         else
         {
 			Wheels = wheels;
         }
-		RandomiseSwitchBoard();
 	}
 
 
@@ -99,7 +116,7 @@ public class Enigma
 	/// Randomise the wheel values.
 	/// Does NOT use a cryptographically secure source of randomness.
 	/// </summary>
-	private void RandomiseWheels()
+	public void RandomiseWheels()
     {
 		Wheels = new int[] { rnd.Next(26), rnd.Next(26), rnd.Next(26) };
     }
@@ -109,9 +126,16 @@ public class Enigma
 	/// Randomise the switch board values.
 	/// Does NOT use a cryptographically secure source of randomness.
 	/// </summary>
-	private void RandomiseSwitchBoard()
-    {
-        for (int i = 97; i < 123; i++)
+	public void RandomiseSwitchBoard()
+	{
+		//Unlink all old pairs
+		foreach (var pair in SwitchBoard)
+		{
+			UnlinkChar(pair.Key);
+		}
+
+		//For each character, pair with another random character
+		for (int i = 97; i < 123; i++)
         {
 			while (!sb.ContainsKey((char)i))
             {
@@ -260,9 +284,9 @@ public class Enigma
 		}
 
 		//Run the on wheel advance method if it is set
-		if (!(OnWheelAdvance is null))
+		if (!(OnWheelChange is null))
 		{
-			OnWheelAdvance(Wheels);
+			OnWheelChange(Wheels);
 		}
 	}
 

@@ -27,9 +27,38 @@
         <TextBox x:Name="InputText" Margin="10,0,594,10" PlaceholderText="Input text here!" TextWrapping="Wrap" Height="257" VerticalAlignment="Bottom"/>
         <TextBox x:Name="OutputText" Margin="0,0,10,10" PlaceholderText="Output text is displayed here!" TextWrapping="Wrap" IsReadOnly="True" HorizontalAlignment="Right" Width="396" Height="257" VerticalAlignment="Bottom"/>
         <Button x:Name="ProcessButton" Content="Process" HorizontalAlignment="Center" Margin="0,591,0,0" VerticalAlignment="Top" Height="42" Width="129" Click="ProcessInput"/>
-        <Button x:Name="SaveWheelsButton" Content="Save" Margin="29,275,0,0" VerticalAlignment="Top" Height="35" Width="53" Click="SaveWheels"/>
-        <Button x:Name="LoadWheelsButton" Content="Load" Margin="82,275,0,0" VerticalAlignment="Top" Height="35" Width="53" Click="LoadWheels" IsEnabled="False"/>
+        <Button x:Name="SaveWheelsButton" Content="Save" Margin="29,275,0,0" VerticalAlignment="Top" Height="35" Width="53" Click="Save"/>
+        <Button x:Name="LoadWheelsButton" Content="Load" Margin="82,275,0,0" VerticalAlignment="Top" Height="35" Width="53" Click="Load" IsEnabled="False"/>
         <CheckBox x:Name="DecodeModeCheckbox" Content="Decode" Margin="0,638,0,0" VerticalAlignment="Top" Width="70" Height="27" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" HorizontalAlignment="Center"/>
         <Button x:Name="SwitchButton" Content="Switch" HorizontalAlignment="Center" Margin="0,544,0,0" VerticalAlignment="Top" Height="42" Width="129" Click="SwitchInput"/>
+        <Grid Margin="0,10,10,0" HorizontalAlignment="Right" Width="850" Height="468" VerticalAlignment="Top">
+            <Button x:Name="QBtn" Content="Q" Margin="100,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="WBtn" Content="W" Margin="165,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="EBtn" Content="E" Margin="230,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="RBtn" Content="R" Margin="295,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="TBtn" Content="T" Margin="360,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="YBtn" Content="Y" Margin="425,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="UBtn" Content="U" Margin="490,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="IBtn" Content="I" Margin="555,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="OBtn" Content="O" Margin="620,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="PBtn" Content="P" Margin="685,10,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="ABtn" Content="A" Margin="130,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="SBtn" Content="S" Margin="195,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="DBtn" Content="D" Margin="260,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="FBtn" Content="F" Margin="325,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="GBtn" Content="G" Margin="390,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="HBtn" Content="H" Margin="455,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="JBtn" Content="J" Margin="520,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="KBtn" Content="K" Margin="585,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="LBtn" Content="L" Margin="650,75,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="ZBtn" Content="Z" Margin="160,140,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="XBtn" Content="X" Margin="225,140,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="CBtn" Content="C" Margin="290,140,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="VBtn" Content="V" Margin="355,140,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="BBtn" Content="B" Margin="420,140,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="NBtn" Content="N" Margin="485,140,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+            <Button x:Name="MBtn" Content="M" Margin="550,140,0,0" VerticalAlignment="Top" Height="60" Width="60" Click="SwitchBoardLink"/>
+        </Grid>
+        <Button x:Name="RandomiseButton" Content="Randomise" Margin="29,315,0,0" VerticalAlignment="Top" Height="35" Width="106" Click="Randomise"/>
     </Grid>
 </Page>

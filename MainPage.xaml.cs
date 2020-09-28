@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -19,43 +20,165 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Enigma_Machine
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
-        Enigma enigma;
-        private int[] WheelStartState;
+        //TODO: Remove the heavy use of colors on the switch board to make the program more accessible
+
+        /// <summary>
+        /// Enigma object which actually handles encoding and decoding
+        /// </summary>
+        private Enigma enigma = new Enigma();
+
+
+        /// <summary>
+        /// This variable is where wheel states are saved so they can be loaded with the load button.
+        /// </summary>
+        private int[] WheelSave;
+
+
+        /// <summary>
+        /// This variable is where the switch board variables are stored between save/load events
+        /// </summary>
+        private Dictionary<char, char> SwitchBoardSave;
+
+
+        /// <summary>
+        /// The first switch board button pressed is store in this variable until the second one is pressed, they are then linked.
+        /// </summary>
+        private Button SwitchBoardButton = null;
+
+
+        /// <summary>
+        /// Dictionary to store a mapping of characters to the buttons that represnent them on the switch board
+        /// </summary>
+        private Dictionary<char, Button> sbBtns = new Dictionary<char, Button>();
+        
+
+        /// <summary>
+        /// Colors used for the switch board buttons when linked.
+        /// Need at least 13 so that all letters of the alphabet can be covered.
+        /// </summary>
+        private readonly Color[] sbBtnColors = new Color[] { 
+            Colors.DarkRed,
+            Colors.DarkMagenta,
+            Colors.DarkViolet,
+            Colors.Lime,
+            Colors.LightSteelBlue,
+            Colors.Cyan,
+            Colors.DarkKhaki,
+            Colors.DarkTurquoise,
+            Colors.DarkGray,
+            Colors.DarkOrange,
+            Colors.Fuchsia,
+            Colors.Navy,
+            Colors.DarkOliveGreen
+        };
+
+
+        /// <summary>
+        /// List used to store the colors that have already been used, to prevent button pairs from not having unique colors
+        /// </summary>
+        private readonly List<Color> sbUsedColors = new List<Color>();
+
 
         public MainPage()
         {
             this.InitializeComponent();
-            enigma = new Enigma();
 
             //Bind methods to enigma events
-            enigma.OnWheelAdvance = UpdateSliders;
+            enigma.OnWheelChange = UpdateSliders;
+            enigma.OnSwitchBoardLink = LinkButtons;
+            enigma.OnSwitchBoardUnlink = UnlinkButtons;
 
-            //Set the starting slider positions
-            UpdateSliders();
+            # region Insert buttons into the sbButtons dict
+            //There might be a better way of doing this, but this is quick and easy for now
+            
+            sbBtns.Add('q', QBtn);
+            sbBtns.Add('w', WBtn);
+            sbBtns.Add('e', EBtn);
+            sbBtns.Add('r', RBtn);
+            sbBtns.Add('t', TBtn);
+            sbBtns.Add('y', YBtn);
+            sbBtns.Add('u', UBtn);
+            sbBtns.Add('i', IBtn);
+            sbBtns.Add('o', OBtn);
+            sbBtns.Add('p', PBtn);
+            sbBtns.Add('a', ABtn);
+            sbBtns.Add('s', SBtn);
+            sbBtns.Add('d', DBtn);
+            sbBtns.Add('f', FBtn);
+            sbBtns.Add('g', GBtn);
+            sbBtns.Add('h', HBtn);
+            sbBtns.Add('j', JBtn);
+            sbBtns.Add('k', KBtn);
+            sbBtns.Add('l', LBtn);
+            sbBtns.Add('z', ZBtn);
+            sbBtns.Add('x', XBtn);
+            sbBtns.Add('c', CBtn);
+            sbBtns.Add('v', VBtn);
+            sbBtns.Add('b', BBtn);
+            sbBtns.Add('n', NBtn);
+            sbBtns.Add('m', MBtn);
+
+            #endregion
+
+            //Randomise variables
+            enigma.Randomise();
 
             //Save our starting wheel state
-            SaveWheels();
+            Save();
         }
+
 
         /// <summary>
         /// Update the sliders on the page with the wheel values from the enigma object
         /// </summary>
-        private void UpdateSliders()
+        private void UpdateSliders(int[] wheels)
         {
             //Update slider values
-            W1Slider.Value = enigma.Wheels[0];
-            W2Slider.Value = enigma.Wheels[1];
-            W3Slider.Value = enigma.Wheels[2];
+            W1Slider.Value = wheels[0];
+            W2Slider.Value = wheels[1];
+            W3Slider.Value = wheels[2];
 
             //Update text block values
-            W1PosText.Text = enigma.Wheels[0].ToString();
-            W2PosText.Text = enigma.Wheels[1].ToString();
-            W3PosText.Text = enigma.Wheels[2].ToString();
+            W1PosText.Text = wheels[0].ToString();
+            W2PosText.Text = wheels[1].ToString();
+            W3PosText.Text = wheels[2].ToString();
+        }
+
+
+        /// <summary>
+        /// Assigns the same color to the switch board buttons for the given characters.
+        /// </summary>
+        private void LinkButtons(char a, char b) 
+        {
+            foreach (Color color in sbBtnColors)
+            {
+                if (!sbUsedColors.Contains(color))
+                {
+                    SolidColorBrush brush = new SolidColorBrush(color);
+                    sbBtns[a].Background = brush;
+                    sbBtns[b].Background = brush;
+                    sbUsedColors.Add(color);
+                    break;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Restores the default colors for the switch board buttons for the given characters.
+        /// </summary>
+        private void UnlinkButtons(char a, char b)
+        {
+            //Use this nasty code to get the current color and remove it from the used colors list
+            Color color = ((SolidColorBrush)sbBtns[a].Background).Color;
+            sbUsedColors.Remove(color);
+
+            //Get default color from another button on the page
+            sbBtns[a].Background = ProcessButton.Background;
+            sbBtns[b].Background = ProcessButton.Background;
+            
         }
 
 
@@ -75,7 +198,7 @@ namespace Enigma_Machine
 
                 enigma.Wheels = newWheels;
 
-                UpdateSliders();
+                UpdateSliders(enigma.Wheels);
             }
         }
 
@@ -87,40 +210,41 @@ namespace Enigma_Machine
         {
             if (DecodeModeCheckbox.IsChecked == true)
             {
-                OutputText.Text = enigma.Encode(InputText.Text);
-            } 
+                OutputText.Text = enigma.Decode(InputText.Text);
+            }
             else
             {
-                OutputText.Text = enigma.Decode(InputText.Text);
+                OutputText.Text = enigma.Encode(InputText.Text);
             }
         }
 
 
         /// <summary>
-        /// Save the current wheel states to be loaded later.
+        /// Save the current wheel and switch board states so they can be loaded later.
         /// </summary>
-        private void SaveWheels()
+        private void Save()
         {
-            WheelStartState = enigma.Wheels;
+            WheelSave = enigma.Wheels;
+            SwitchBoardSave = enigma.SwitchBoard;
         }
 
 
         /// <summary>
-        /// Load the previously saved wheel states.
+        /// Load the previously saved wheel and switch board.
         /// </summary>
-        private void LoadWheels()
+        private void Load()
         {
-            enigma.Wheels = WheelStartState;
-            UpdateSliders();
+            enigma.Wheels = WheelSave;
+            enigma.SwitchBoard = SwitchBoardSave;
         }
 
 
         /// <summary>
         /// Overload of the normal SaveWheels method, which can be called from a button
         /// </summary>
-        private void SaveWheels(object sender, RoutedEventArgs e)
+        private void Save(object sender, RoutedEventArgs e)
         {
-            SaveWheels();
+            Save();
             LoadWheelsButton.IsEnabled = true;
         }
 
@@ -128,9 +252,9 @@ namespace Enigma_Machine
         /// <summary>
         /// Overload of the normal LoadWheels method, which can be called from a button
         /// </summary>
-        private void LoadWheels(object sender, RoutedEventArgs e)
+        private void Load(object sender, RoutedEventArgs e)
         {
-            LoadWheels();
+            Load();
         }
 
 
@@ -141,6 +265,37 @@ namespace Enigma_Machine
         {
             InputText.Text = OutputText.Text;
             OutputText.Text = "";
+        }
+
+
+        /// <summary>
+        /// Method handling switch board button linking
+        /// </summary>
+        private void SwitchBoardLink(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            //If switch board button is null, then this is the first press
+            if (SwitchBoardButton is null)
+            {
+                SwitchBoardButton = button;
+            }
+            else
+            {
+                //Otherwise we must link the characters for the SwitchBoardButton and the new button
+                char a = SwitchBoardButton.Content.ToString()[0];
+                char b = button.Content.ToString()[0];
+                enigma.LinkChars(a, b);
+                SwitchBoardButton = null;
+            }
+        }
+
+
+        /// <summary>
+        /// Button action to randomise engima encoding values
+        /// </summary>
+        private void Randomise(object sender, RoutedEventArgs e)
+        {
+            enigma.Randomise();
         }
     }
 }
