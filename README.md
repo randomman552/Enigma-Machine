@@ -2,6 +2,9 @@
 This is a rework of an old project written with C# and using windows forms.\
 It is based on C# and UWP platform, and was a project intended to introduce me to the basics of UWP.
 
+## Running
+In order to run the program, you will need to clone this repository, and then use Visual Studio to build the solution and run it, this will handle all project dependecies.
+
 ## How to use
 ![Program running](.github/preview.png)
 
