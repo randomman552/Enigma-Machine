@@ -81,6 +81,8 @@ namespace Enigma_Machine
         private readonly List<Color> sbUsedColors = new List<Color>();
 
 
+        private bool controlsLocked = false;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -273,6 +275,7 @@ namespace Enigma_Machine
         /// </summary>
         private void SwitchBoardLink(object sender, RoutedEventArgs e)
         {
+            if (controlsLocked) return;
             Button button = sender as Button;
             //If switch board button is null, then this is the first press
             if (SwitchBoardButton is null)
@@ -296,6 +299,28 @@ namespace Enigma_Machine
         private void Randomise(object sender, RoutedEventArgs e)
         {
             enigma.Randomise();
+        }
+
+        /// <summary>
+        /// Button action to lock controls that change settings.
+        /// This includes the switchboard and wheel sliders, but not the save/load buttons
+        /// </summary>
+        private void LockControls(object sender, RoutedEventArgs e)
+        {
+            controlsLocked = !controlsLocked;
+            bool enabledState = !controlsLocked;
+
+            W1Slider.IsEnabled = enabledState;
+            W2Slider.IsEnabled = enabledState;
+            W3Slider.IsEnabled = enabledState;
+
+            if (controlsLocked)
+            {
+                lockButton.Content = "Unlock";
+            } else
+            {
+                lockButton.Content = "Lock";
+            }
         }
     }
 }
